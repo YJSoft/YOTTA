@@ -204,14 +204,6 @@ else $deletion = false;
 				</div>
 			</div>
 			<button type="button" id="download" class="btn btn-success btn-block btn-download" onclick="download()"><?php echo $str['download']; ?></button>
-			<div class="spacer2"></div>
-			<div class="row">
-				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-				<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8739077797209742" data-ad-slot="5765795967" data-ad-format="auto"></ins>
-				<script>
-				(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>
-			</div>
 		</div>
 	</div>
 	<?php require_once('footer.php'); ?>

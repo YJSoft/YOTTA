@@ -16,4 +16,3 @@ if ($metadata['password_delete'] === hash('sha512', $metadata['salt_delete'] . $
 } else {
 	echo '{"result":"' . $str['err_wrongpw'] . '"}';
 }
-?>

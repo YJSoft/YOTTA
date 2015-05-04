@@ -27,4 +27,3 @@ if (hash('sha512', explode('$', $data[3])[2] . $_GET['password']) === explode('$
 } else {
 	echo '{"result":"' . $str['err_wrongpw'] . '"}';
 }
-?>

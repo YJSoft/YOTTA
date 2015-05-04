@@ -10,12 +10,16 @@
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
+					<?php if ($mode === 'install') { ?>
+					<li class="active"><a href="./"  hreflang="<?php echo $_SESSION['lang'];?>">설치</a></li>
+					<?php } else { ?>
 					<li<?php if ($mode === 'upload') echo ' class="active"'; ?>><a href="./" hreflang="<?php echo $_SESSION['lang'];?>"><?php echo $str['newfile']; ?></a></li>
 					<li<?php if ($mode === 'list') echo ' class="active"'; ?>><a href="./list" hreflang="<?php echo $_SESSION['lang'];?>"><?php echo $str['list']; ?></a></li>
 					<li<?php if ($mode === 'about') echo ' class="active"'; ?>><a href="./about" hreflang="ko"><?php echo $str['about']; ?></a></li>
 <?php
 					if ($mode === 'download') {
 						echo '					<li class="active"><a href="#">' . $str['download'] . ' - ' . ((mb_strlen($metadata['filename'], 'UTF-8') > 10) ? (mb_substr($metadata['filename'], 0, 7, 'UTF-8') . '...') : ($metadata['filename'])) . '</a></li>';
+					}
 					}
 					?>
 				</ul>

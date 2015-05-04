@@ -1,5 +1,6 @@
 <?php
 require_once('include.php');
+//TODO too long if statement
 if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt']) && isset($_POST['password_delete']) && isset($_POST['expires']) && isset($_POST['showfilename']) && isset($_POST['enablelist'])) {
 	if ($_FILES["file"]["size"] > $sizelimit) {
 		echo '{"result":"error","desc":"' . $str['err_sizelimit'] . '"}';
@@ -52,4 +53,3 @@ if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt'])
 	echo '{"result":"error","desc":"' . $str['err_parametermissing'] . '"}';
 	exit();
 }
-?>
