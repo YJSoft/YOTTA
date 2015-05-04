@@ -2,8 +2,6 @@
 require_once('include.php');
 set_time_limit(0);
 
-mysql_query("CREATE TABLE log(id INT NOT NULL auto_increment, filename TEXT NOT NULL, IP TEXT NOT NULL, result TEXT NOT NULL, time DATETIME NOT NULL, PRIMARY KEY (id));");
-
 if ($_SESSION[$_GET['link']]['captcha'] !== 'true') {
 	echo '{"result":"' . $str['err_captcha'] . '"}';
 	mysql_query("INSERT INTO log SET filename='" . mysql_real_escape_string($_GET['link']) . "', IP='" . $_SERVER['REMOTE_ADDR'] . "', result='captchawrong', time='" . date("Y-m-d H:i:s") . "';");
@@ -32,10 +30,9 @@ if (hash('sha512', explode('$', $data[3])[2] . $_GET['password']) === explode('$
 	$content = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, pack('H*', $_GET['password']), $content, MCRYPT_MODE_CBC, $data[0]);
 	header('Content-Type: application/octet-stream', FALSE);
 	header("Content-Transfer-Encoding: Binary", FALSE); 
-	header("Content-Disposition: attachment; filename=\"" . $data[1] . "\"", FALSE);
+	header("Content-Disposition: attachment; filename=\"" . $metadata['filename'] . "\"", FALSE);
 	header("Content-Length: " . $metadata['filesize'], FALSE);
 	print($content);
 } else {
 	echo '{"result":"error"}';
 }
-?>

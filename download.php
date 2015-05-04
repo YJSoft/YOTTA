@@ -112,6 +112,12 @@ else $deletion = false;
 			$("alert").css('display', 'block');
 		};
 
+		$.extend({
+			postJSON: function( url, data, callback) {
+				return jQuery.post(url, data, callback, "json");
+			}
+		});
+
 		$(document).ready(function() {
 			if ((typeof navigator.plugins != "undefined" && typeof navigator.plugins["Shockwave Flash"] == "object") || (window.ActiveXObject && (new ActiveXObject("ShockwaveFlash.ShockwaveFlash")) != false)) {
 				$('#copy').zclip({
@@ -123,7 +129,7 @@ else $deletion = false;
 				});
 			} else {
 				$('#copy').click(function() {
-					alert('<?php echo $str['cannotcopy']; ?>');
+					prompt('<?php echo $str['controlctocopy']; ?>','<?php echo $str['link'] . $_GET['link']; ?>');
 				});
 			}
 		});
@@ -138,15 +144,12 @@ else $deletion = false;
 				return;
 			}
 			var pw_hashed = CryptoJS.SHA256('<?php echo $metadata['salt']; ?>' + password).toString();
-			if ($("#aswift_0_expand")[0] == null) {
-				alert('<?php echo $str['err_noadblock']; ?>');
-				return;
-			}
 			$("#download").attr('disabled', '');
-			$.getJSON('auth/<?php echo $_GET['link']; ?>/' + pw_hashed + '/' + grecaptcha.getResponse(recaptcha)).done(function(data) {
+			$.postJSON("auth.php",{"link":"<?php echo $_GET['link']; ?>","password":pw_hashed,"captcha":grecaptcha.getResponse(recaptcha)},function(data) {
 				if (data.result === 'succeed') {
 					$('#downloader').attr('href', 'fetch/<?php echo $_GET['link']; ?>/' + pw_hashed);
 					document.getElementById('downloader').click();
+					$("#recaptcha").html('');
 					recaptcha = grecaptcha.render('recaptcha', {'sitekey': '<?php echo $recaptcha_sitekey; ?>'});
 				} else {
 					alert(data.result);
@@ -204,14 +207,6 @@ else $deletion = false;
 				</div>
 			</div>
 			<button type="button" id="download" class="btn btn-success btn-block btn-download" onclick="download()"><?php echo $str['download']; ?></button>
-			<div class="spacer2"></div>
-			<div class="row">
-				<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-				<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8739077797209742" data-ad-slot="5765795967" data-ad-format="auto"></ins>
-				<script>
-				(adsbygoogle = window.adsbygoogle || []).push({});
-				</script>
-			</div>
 		</div>
 	</div>
 	<?php require_once('footer.php'); ?>

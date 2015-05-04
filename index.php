@@ -140,10 +140,7 @@ $title = $str['title'];
 		var upload = function() {
 			var password = $("#password").val();
 			var password_delete = $("#password_delete").val();
-			if (window.location.protocol !== "https:") {
-				alert('<?php echo $str['err_nohttps']; ?>');
-				return;
-			} else if (file === null) {
+			if (file === null) {
 				alert('<?php echo $str['err_nofile']; ?>');
 				return;
 			} else if (password === '') {
