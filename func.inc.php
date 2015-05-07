@@ -15,7 +15,10 @@ function getFile($filename)
 }
 function getFileList($onlylist=0)
 {
-	return mysql_query("SELECT * FROM storage" . $onlylist==1?" where enablelist='1'":"" . " ORDER BY id DESC;");
+	$cond = $onlylist==1 ? " where enablelist='1'" : "";
+	$query = sprintf("SELECT * FROM storage%s ORDER BY id DESC;",$cond);
+
+	return mysql_query($query);
 }
 function getFileData($filename,$password)
 {
