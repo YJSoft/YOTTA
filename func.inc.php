@@ -13,6 +13,10 @@ function getFile($filename)
 	$result = mysql_query("SELECT * FROM storage WHERE filename='" . mysql_real_escape_string($filename) . "';");
 	return mysql_fetch_row($result);
 }
+function getFileList($onlylist=0)
+{
+	return mysql_query("SELECT * FROM storage" . $onlylist==1?" where enablelist='1'":"" . " ORDER BY id DESC;");
+}
 function getFileData($filename,$password)
 {
 	$result = mysql_query("SELECT filedata, AES_DECRYPT(filename_enc, '" . mysql_real_escape_string($password) . "') FROM storage WHERE filename='" . mysql_real_escape_string($filename) . "'");
@@ -27,9 +31,9 @@ function updateLastAccessDate($filename)
 {
 	mysql_query("UPDATE storage SET lastop='" . date('Y-m-d H:i:s') . "' WHERE filename='" . mysql_real_escape_string($filename)  . "';");
 }
-function printError($code='error',$result='Unknown error occured')
+function printError($code='error',$result='Unknown error occured',$link='')
 {
-	$err = array('code'=>$code, 'result'=>$result);
+	$err = array('code'=>$code, 'result'=>$result, 'link'=>$link);
 	echo json_encode($err);
 }
 function getFileCaptchaResult($filename)
@@ -39,4 +43,11 @@ function getFileCaptchaResult($filename)
 function getFileSessionTime($filename)
 {
 	return $_SESSION[$filename]['time'];
+}
+function deleteFile($filename)
+{
+	mysql_query("DELETE FROM storage WHERE filename='" . mysql_real_escape_string($filename) . "';");
+	
+	if (file_exists('filedata' . DIRECTORY_SEPARATOR . $filename)) unlink('filedata' . DIRECTORY_SEPARATOR . $filename);
+	else unlink('filedata_big' . DIRECTORY_SEPARATOR . $filename);
 }

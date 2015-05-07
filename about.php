@@ -1,5 +1,5 @@
 <?php
-require_once("include.php");
+require("include.php");
 
 $title = $str['servicename'];
 ?><!doctype HTML>
@@ -9,7 +9,7 @@ $title = $str['servicename'];
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<?php
 	$mode = 'about';
-	require_once('header.php');
+	@include('header.php');
 	?>
 	<title><?php echo $title; ?></title>
 	<link rel="stylesheet" type="text/css" href="site.min.css">
@@ -56,7 +56,7 @@ $title = $str['servicename'];
 	<!--[if lte IE 8]><script>alert('<?php echo $str['err_noie']; ?>');</script><![endif]-->
 	<?php
 	$mode = 'about';
-	require_once('menu.php');
+	@include('menu.php');
 	?>
 	<?php if ($_SESSION['lang'] == 'ko') { ?>
 	<div class="container main">
@@ -113,6 +113,6 @@ $title = $str['servicename'];
 		</div>
 	</div>
 	<?php } ?>
-	<?php require_once('footer.php'); ?>
+	<?php @include('footer.php'); ?>
 </body>
 </html>

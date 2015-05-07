@@ -1,7 +1,6 @@
 <?php
 require_once('include.php');
-$result = mysql_query("SELECT * FROM storage WHERE filename='" . mysql_real_escape_string($_GET['link']) . "';");
-$data = mysql_fetch_row($result);
+$data = getFile($_GET['link']);
 if (count($data) < 2) {
 	header('Location: ./nofile');
 	exit();
@@ -20,7 +19,7 @@ else $deletion = false;
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<?php
 	$mode = 'download';
-	require_once('header.php');
+	@include('header.php');
 	?>
 	<title><?php echo $title; ?></title>
 	<link rel="stylesheet" type="text/css" href="site.min.css">
@@ -190,7 +189,7 @@ else $deletion = false;
 	<!--[if lte IE 8]><script>alert('<?php echo $str['err_noie']; ?>');</script><![endif]-->
 	<?php
 	$mode = 'download';
-	require_once('menu.php');
+	@include('menu.php');
 	?>
 	<div class="container main">
 		<div class="panel content">
@@ -209,7 +208,7 @@ else $deletion = false;
 			<button type="button" id="download" class="btn btn-success btn-block btn-download" onclick="download()"><?php echo $str['download']; ?></button>
 		</div>
 	</div>
-	<?php require_once('footer.php'); ?>
+	<?php @include('footer.php'); ?>
 	<a id="downloader" style="display:hidden;" href="#"></a>
 	<div id="modal" class="modal fade">
 		<div class="modal-dialog">

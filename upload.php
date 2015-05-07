@@ -1,8 +1,17 @@
 <?php
-require_once('include.php');
-//TODO too long if statement
-if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt']) && isset($_POST['password_delete']) && isset($_POST['expires']) && isset($_POST['showfilename']) && isset($_POST['enablelist'])) {
-	if ($_FILES["file"]["size"] > $sizelimit) {
+require('include.php');
+
+//changed from long if statement
+$required=array('password','salt','password_delete','expires','showfilename','enablelist');
+$isUpload=TRUE;
+foreach($required as $field) {
+	if(!isset($_POST[$field])) {
+		$isUpload=FALSE;
+		break;
+	}
+}
+if(isset($_FILES["file"]) && $isUpload) {
+	if($_FILES["file"]["size"] > $sizelimit) {
 		echo '{"result":"error","desc":"' . $str['err_sizelimit'] . '"}';
 		exit();
 	}
@@ -14,9 +23,7 @@ if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt'])
 	while(1){
 	$filename_md5 = '';
 	for($i = 0; $i < 8; $i++) $filename_md5 .= $rand_base[rand(0, 35)];
-	$query = "SELECT * FROM storage WHERE filename='" . $filename_md5 . "'";
-	$result = mysql_query($query);
-	$data = mysql_fetch_row($result);
+	$data = getFile($filename_md5);
 	if (count($data) < 2) break;
 	usleep(10);
 	}
@@ -27,9 +34,9 @@ if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt'])
 	$iv = mcrypt_create_iv(16, MCRYPT_RAND);
 	$content = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $content, MCRYPT_MODE_CBC, $iv);
 	if ($_FILES["file"]["size"] > $file_threshold) {
-		file_put_contents('filedata_big/' . $filename_md5, $content);
+		file_put_contents('filedata_big' . DIRECTORY_SEPARATOR . $filename_md5, $content);
 	} else {
-		file_put_contents('filedata/' . $filename_md5, $content);
+		file_put_contents('filedata' . DIRECTORY_SEPARATOR . $filename_md5, $content);
 	}
 
 	$metadata['filesize'] = $_FILES["file"]["size"];
@@ -48,7 +55,7 @@ if (isset($_FILES["file"]) && isset($_POST['password']) && isset($_POST['salt'])
 
 	$query = "INSERT INTO storage SET filename='" . $filename_md5 . "', ip='" . mysql_real_escape_string($_SERVER['REMOTE_ADDR']) . "', filedata='" . mysql_real_escape_string($iv) . "', password='" . mysql_real_escape_string($_POST['salt']) . '$' . hash('sha512', mysql_real_escape_string($salt2) . mysql_real_escape_string($_POST['password'])) . "$" . $salt2 . "', metadata='" . mysql_real_escape_string($metadata_serialized) . "', filename_enc=AES_ENCRYPT('" . mysql_real_escape_string($_FILES['file']['name']) . "', '" . mysql_real_escape_string($_POST['password']) . "'), expires='" . date('Y-m-d 23:59:59', strtotime($_POST['expires'])) . "', lastop='" . date('Y-m-d H:i:s') . "', enablelist='" . ($_POST['enablelist'] === 'true'?'1':'0') . "';";
 	mysql_query($query);
-	echo '{"result":"succeed","link":"' . $filename_md5 . '"}';
+	printError('succeed','succeed',$filename_md5);
 } else {
 	echo '{"result":"error","desc":"' . $str['err_parametermissing'] . '"}';
 	exit();

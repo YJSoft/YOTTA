@@ -1,5 +1,5 @@
 <?php
-require_once("include.php");
+require("include.php");
 
 $title = $str['list'] . ' - ' . $str['servicename'];
 ?><!doctype HTML>
@@ -9,7 +9,7 @@ $title = $str['list'] . ' - ' . $str['servicename'];
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<?php
 	$mode = 'list';
-	require_once('header.php');
+	@include('header.php');
 	?>
 	<title><?php echo $title; ?></title>
 	<link rel="stylesheet" type="text/css" href="site.min.css">
@@ -44,13 +44,12 @@ $title = $str['list'] . ' - ' . $str['servicename'];
 	<!--[if lte IE 8]><script>alert('<?php echo $str['err_noie']; ?>');</script><![endif]-->
 	<?php
 	$mode = 'list';
-	require_once('menu.php');
+	@include('menu.php');
 	?>
 	<div class="container main">
 		<div class="panel content">
-			<div class="list-group">
-<?php
-				$result = mysql_query("SELECT * FROM storage where enablelist='1' ORDER BY id DESC;");
+			<div class="list-group"><?php
+				$result = getFileList(1);
 				while($data = mysql_fetch_row($result)) {
 					$metadata = unserialize($data[5]);
 					if ($metadata['filename'] === '') $metadata['filename'] = $str['hiddenfilename'];
@@ -60,10 +59,9 @@ $title = $str['list'] . ' - ' . $str['servicename'];
 					<p class="list-group-item-text">' . $str['link'] . $data[1] . '</p>
 				</a>
 ';
-				}?>
-			</div>
+}?>			</div>
 		</div>
 	</div>
-	<?php require_once('footer.php'); ?>
+	<?php @include('footer.php'); ?>
 </body>
 </html>

@@ -1,9 +1,5 @@
 <?php
-require_once("include.php");
-
-//mysql_query("CREATE TABLE storage(id INT NOT NULL auto_increment, filename TEXT NOT NULL, filedata MEDIUMBLOB NOT NULL, password TEXT NOT NULL, ip TEXT NOT NULL, metadata MEDIUMTEXT NOT NULL, filename_enc MEDIUMTEXT NOT NULL, expires DATETIME NOT NULL, lastop DATETIME NOT NULL, enablelist BOOLEAN NOT NULL, PRIMARY KEY (id));");
-
-$title = $str['title'];
+require("include.php");
 ?><!doctype HTML>
 <html>
 <head>
@@ -11,9 +7,9 @@ $title = $str['title'];
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<?php
 	$mode = 'upload';
-	require_once('header.php');
+	@include('header.php');
 	?>
-	<title><?php echo $title; ?></title>
+	<title><?php echo $str['title']; ?></title>
 	<link rel="stylesheet" type="text/css" href="site.min.css">
 	<link rel="stylesheet" type="text/css" href="jquery-ui.min.css">
 	<script src="jquery.js"></script>
@@ -237,7 +233,7 @@ $title = $str['title'];
 	<!--[if lte IE 8]><script>alert('<?php echo $str['err_noie']; ?>');</script><![endif]-->
 	<?php
 	$mode = 'upload';
-	require_once('menu.php');
+	@include('menu.php');
 	?>
 	<div class="container main">
 		<div id="form" class="panel content">
@@ -312,6 +308,6 @@ $title = $str['title'];
 			<button id="upload" type="button" class="btn btn-primary btn-block btn-upload" onclick="upload()"><?php echo $str['upload']; ?></button>
 		</div>
 	</div>
-	<?php require_once('footer.php'); ?>
+	<?php @include('footer.php'); ?>
 </body>
 </html>

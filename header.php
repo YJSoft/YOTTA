@@ -11,3 +11,4 @@ if ($mode === 'download') {
 	echo 'Public files on ' . $str['servicename'];
 }
 echo '">';
+@include('header.user.php');
