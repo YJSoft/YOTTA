@@ -1,38 +1,42 @@
 <?php
 require_once('include.php');
 set_time_limit(0);
+$file_link=$_GET['link'];
+$file_password=$_GET['password'];
 
-if ($_SESSION[$_GET['link']]['captcha'] !== 'true') {
-	echo '{"result":"' . $str['err_captcha'] . '"}';
-	mysql_query("INSERT INTO log SET filename='" . mysql_real_escape_string($_GET['link']) . "', IP='" . $_SERVER['REMOTE_ADDR'] . "', result='captchawrong', time='" . date("Y-m-d H:i:s") . "';");
+if (getFileCaptchaResult($file_link)!=='true') {
+	$err = array('code'=>'captchawrong', 'result'=>$str['err_captcha']);
+	echo json_encode($err);
+	writeLog($file_link,'captchawrong',getIP());
 	exit();
-} else if (microtime(true) - $_SESSION[$_GET['link']]['time'] > 10) {
-	echo '{"result":"' . $str['err_session'] . '"}';
-	mysql_query("INSERT INTO log SET filename='" . mysql_real_escape_string($_GET['link']) . "', IP='" . $_SERVER['REMOTE_ADDR'] . "', result='sessionexpired', time='" . date("Y-m-d H:i:s") . "';");
+} else if (microtime(true) - getFileSessionTime($file_link) > 10) {
+	$err = array('code'=>'sessionexpired', 'result'=>$str['err_session']);
+	echo json_encode($err);
+	writeLog($file_link,'sessionexpired',getIP());
 	exit();
 }
 
-$result = mysql_query("SELECT * FROM storage WHERE filename='" . mysql_real_escape_string($_GET['link']) . "';");
-$data = mysql_fetch_row($result);
+$data = getFile($file_link);
 if (count($data) < 2) {
-	mysql_query("INSERT INTO log SET filename='" . mysql_real_escape_string($_GET['link']) . "', IP='" . $_SERVER['REMOTE_ADDR'] . "', result='wrongfile', time='" . date("Y-m-d H:i:s") . "';");
+	writeLog($file_link,'wrongfile',getIP());
 	header('Location: ./');
 	exit();
 }
-mysql_query("INSERT INTO log SET filename='" . mysql_real_escape_string($_GET['link']) . "', IP='" . $_SERVER['REMOTE_ADDR'] . "', result='succeed', time='" . date("Y-m-d H:i:s") . "';");
+
+writeLog($file_link,'succeed',getIP());
 $metadata = unserialize($data[5]);
-if (hash('sha512', explode('$', $data[3])[2] . $_GET['password']) === explode('$', $data[3])[1]) {
-	$result = mysql_query("SELECT filedata, AES_DECRYPT(filename_enc, '" . mysql_real_escape_string($_GET['password']) . "') FROM storage WHERE filename='" . mysql_real_escape_string($_GET['link']) . "'");
-	mysql_query("UPDATE storage SET lastop='" . date('Y-m-d H:i:s') . "' WHERE filename='" . mysql_real_escape_string($_GET['link'])  . "';");
-	$data = mysql_fetch_row($result);
-	if (file_exists('filedata/' . $_GET['link'])) $content = file_get_contents('filedata/' . $_GET['link']);
-	else $content = file_get_contents('filedata_big/' . $_GET['link']);
-	$content = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, pack('H*', $_GET['password']), $content, MCRYPT_MODE_CBC, $data[0]);
-	header('Content-Type: application/octet-stream', FALSE);
+if (hash('sha512', explode('$', $data[3])[2] . $file_password) === explode('$', $data[3])[1]) {
+	updateLastAccessDate($file_link);
+	$data = getFileData($file_link,$file_password);
+	$filename = $metadata['filename'] === '' ? $data[1] : $metadata['filename'];
+	if (file_exists('filedata/' . $file_link)) $content = file_get_contents('filedata/' . $file_link);
+	else $content = file_get_contents('filedata_big/' . $file_link);
+	$content = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, pack('H*', $file_password), $content, MCRYPT_MODE_CBC, $data[0]);
+	header("Content-Type: application/octet-stream", FALSE);
 	header("Content-Transfer-Encoding: Binary", FALSE); 
-	header("Content-Disposition: attachment; filename=\"" . $metadata['filename'] . "\"", FALSE);
+	header("Content-Disposition: attachment; filename=\"" . $filename . "\"", FALSE);
 	header("Content-Length: " . $metadata['filesize'], FALSE);
 	print($content);
 } else {
-	echo '{"result":"error"}';
+	printError();
 }

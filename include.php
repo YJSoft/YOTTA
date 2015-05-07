@@ -1,13 +1,6 @@
 <?php
-require_once('config.inc.php');
-
-//TODO create func.inc.php(functions file)
-function human_filesize($bytes, $decimals = 2) {
-	$sz = 'BKMGTP';
-	$factor = floor((strlen($bytes) - 1) / 3);
-	return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor] . 'B';
-}
-
+require('config.inc.php');
+require('func.inc.php');
 //this is useless because it forces timezone to seoul.
 //date_default_timezone_set("Asia/Seoul");
 

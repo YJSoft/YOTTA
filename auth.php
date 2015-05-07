@@ -1,7 +1,7 @@
 <?php
 require_once('include.php');
 set_time_limit(0);
-$req = curl_init('https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptcha_secret . '&response=' . $_POST['captcha'] . '&remoteip=' . $_SERVER['REMOTE_ADDR']);
+$req = curl_init('https://www.google.com/recaptcha/api/siteverify?secret=' . $recaptcha_secret . '&response=' . $_POST['captcha'] . '&remoteip=' . getIP());
 curl_setopt($req, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($req, CURLOPT_SSL_VERIFYPEER, FALSE);
 $data = curl_exec($req);
@@ -15,15 +15,14 @@ if ($captcha['success'] === false) {
 $_SESSION[$_POST['link']]['captcha'] = 'true';
 $_SESSION[$_POST['link']]['time'] = microtime(true);
 
-$result = mysql_query("SELECT * FROM storage WHERE filename='" . mysql_real_escape_string($_POST['link']) . "';");
-$data = mysql_fetch_row($result);
+$data = getFile($_POST['link']);
 if (count($data) < 2) {
 	header('Location: ./');
 	exit();
 }
 $metadata = unserialize($data[5]);
 if (hash('sha512', explode('$', $data[3])[2] . $_POST['password']) === explode('$', $data[3])[1]) {
-	echo '{"result":"succeed"}';
+	printError('succeed','succeed');
 } else {
-	echo '{"result":"' . $str['err_wrongpw'] . '"}';
+	printError('err_wrongpw',$str['err_wrongpw']);
 }
