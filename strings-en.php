@@ -1,5 +1,5 @@
 <?php
-$str['servicename'] = 'YOTTA';
+$str['servicename'] = 'YSUS';
 $str['title'] = sprintf('%s :: The Fully-Encrypted File Sharing Service',$str['servicename']);
 $str['newfile'] = 'New file';
 $str['password'] = 'Password for downloading';
