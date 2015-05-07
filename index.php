@@ -197,7 +197,7 @@ require("include.php");
 				}
 			};
 
-			xhr.open('post', 'upload', true);
+			xhr.open('post', './<?php echo getUrl('upload.php') ?>', true);
 			xhr.send(data);
 		};
 

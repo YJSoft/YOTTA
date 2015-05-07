@@ -2,7 +2,7 @@
 require_once('include.php');
 $data = getFile($_GET['link']);
 if (count($data) < 2) {
-	header('Location: ./nofile');
+	header('Location: ./' . getUrl('nofile'));
 	exit();
 }
 $metadata = unserialize($data[5]);
@@ -120,15 +120,17 @@ else $deletion = false;
 		$(document).ready(function() {
 			if ((typeof navigator.plugins != "undefined" && typeof navigator.plugins["Shockwave Flash"] == "object") || (window.ActiveXObject && (new ActiveXObject("ShockwaveFlash.ShockwaveFlash")) != false)) {
 				$('#copy').zclip({
-					path:'ZeroClipboard.swf',
-					copy:'<?php echo $str['link'] . $_GET['link']; ?>',
+					path:'ZeroClipboard.swf',<?php
+                    $download_param = array('linkval'=>$_GET['link']);
+                    $download_url = getUrl('download.php',$download_param);
+                    ?>copy:'<?php echo $str['link'] . $download_url; ?>',
 					afterCopy:function(){
 						alert('<?php echo $str['copied_link']; ?>');
 					}
 				});
 			} else {
 				$('#copy').click(function() {
-					prompt('<?php echo $str['controlctocopy']; ?>','<?php echo $str['link'] . $_GET['link']; ?>');
+					prompt('<?php echo $str['controlctocopy']; ?>','<?php echo $str['link'] . $download_url; ?>');
 				});
 			}
 		});
@@ -146,7 +148,7 @@ else $deletion = false;
 			$("#download").attr('disabled', '');
 			$.postJSON("auth.php",{"link":"<?php echo $_GET['link']; ?>","password":pw_hashed,"captcha":grecaptcha.getResponse(recaptcha)},function(data) {
 				if (data.result === 'succeed') {
-					$('#downloader').attr('href', 'fetch/<?php echo $_GET['link']; ?>/' + pw_hashed);
+					$('#downloader').attr('href', 'fetch/php?link=<?php echo $_GET['link']; ?>&password=' + pw_hashed);
 					document.getElementById('downloader').click();
 					$("#recaptcha").html('');
 					recaptcha = grecaptcha.render('recaptcha', {'sitekey': '<?php echo $recaptcha_sitekey; ?>'});
@@ -173,7 +175,7 @@ else $deletion = false;
 
 		var reqdelete = function() {
 			var pw_delete = $("#pw_delete").val();
-			$.getJSON('delete/<?php echo $_GET['link']; ?>/' + pw_delete).done(function(data) {
+			$.getJSON('delete.php?link=<?php echo $_GET['link']; ?>&password=' + pw_delete).done(function(data) {
 				if (data.result === 'succeed') {
 					alert('<?php echo $str['deleted']; ?>');
 					location.href = './';
@@ -195,7 +197,7 @@ else $deletion = false;
 		<div class="panel content">
 			<div id="recaptcha" class="recaptcha"></div>
 			<h3 class="filename"><?php echo htmlspecialchars($metadata['filename']); ?></h3>
-			<h4><?php echo $str['linktofile-desc'] . ' <a href="' . $str['link'] . $_GET['link'] . '">' . $str['link'] . $_GET['link'] . '</a>';?></h4>&emsp;<button type="button" id="copy" class="btn btn-warning"><?php echo $str['copy']; ?></button><?php if ($deletion) echo '&emsp;<button type="button" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#modal">' . $str['delete'] . '</button>'; ?>
+			<h4><?php echo $str['linktofile-desc'] . ' <a href="' . $str['link'] . $download_url . '">' . $str['link'] . $download_url . '</a>';?></h4>&emsp;<button type="button" id="copy" class="btn btn-warning"><?php echo $str['copy']; ?></button><?php if ($deletion) echo '&emsp;<button type="button" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#modal">' . $str['delete'] . '</button>'; ?>
 			<div class="spacer1"></div>
 			<div class="row">
 				<div class="col-sm-2">
@@ -209,7 +211,7 @@ else $deletion = false;
 		</div>
 	</div>
 	<?php @include('footer.php'); ?>
-	<a id="downloader" style="display:hidden;" href="#"></a>
+	<a id="downloader" style="display:none;" href="#"></a>
 	<div id="modal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">

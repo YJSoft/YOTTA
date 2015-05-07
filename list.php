@@ -52,11 +52,14 @@ $title = $str['list'] . ' - ' . $str['servicename'];
 				$result = getFileList(1);
 				while($data = mysql_fetch_row($result)) {
 					$metadata = unserialize($data[5]);
+                    $download_param = array('linkval'=>$data[1]);
+                    $download_url = getUrl('download.php',$download_param);
+
 					if ($metadata['filename'] === '') $metadata['filename'] = $str['hiddenfilename'];
 					else $metadata['filename'] .= ' (' . human_filesize($metadata['filesize']) . ')';
-					echo '				<a href="' . $str['link'] . $data[1] . '" class="list-group-item" hreflang="' . $_SESSION['lang'] . '">
+					echo '				<a href="' . $str['link'] . $download_url . '" class="list-group-item" hreflang="' . $_SESSION['lang'] . '">
 					<h4 class="list-group-item-heading">' . htmlspecialchars($metadata['filename']) . '</h4>
-					<p class="list-group-item-text">' . $str['link'] . $data[1] . '</p>
+					<p class="list-group-item-text">' . $str['link'] . $download_url . '</p>
 				</a>
 ';
 }?>			</div>
