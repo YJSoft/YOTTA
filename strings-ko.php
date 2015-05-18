@@ -1,5 +1,6 @@
 <?php
 $str['servicename'] = 'YSUS';
+$str['dateformat'] = 'Y-m-d';
 $str['title'] = sprintf('%s :: 안전한 파일 공유 서비스',$str['servicename']);
 $str['newfile'] = '새 파일';
 $str['password'] = '다운로드용 비밀번호';
@@ -37,6 +38,7 @@ $str['showfilename'] = '다운로드 페이지에서 파일명 볼 수 있게 �
 $str['enablelist']='<a href="list">전체 파일 목록</a>에 파일 보이기';
 $str['expires-desc']=sprintf('유효기간에 도달한 파일은 자동으로 삭제됩니다.<br />유효기간이 경과하지 않았더라도 %d일 이상 접근이 없는 파일은 삭제됩니다.',$expire_day);
 $str['expires'] = '파일 유효기간';
+$str['until'] = '%d까지';
 $str['hiddenfilename'] = '파일명 비공개';
 $str['download'] = '다운로드';
 $str['err_wrongpw'] = '잘못된 비밀번호입니다.';

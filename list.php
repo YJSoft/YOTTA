@@ -55,8 +55,8 @@ $title = $str['list'] . ' - ' . $str['servicename'];
                     $download_param = array('linkval'=>$data[1]);
                     $download_url = getUrl('download.php',$download_param);
 
-					if ($metadata['filename'] === '') $metadata['filename'] = $str['hiddenfilename'];
-					else $metadata['filename'] .= ' (' . human_filesize($metadata['filesize']) . ')';
+					if ($metadata['filename'] === '') $metadata['filename'] = $str['hiddenfilename'] . ' (' . human_filesize($metadata['filesize']) . ', ' . str_replace('%d', date($str['dateformat'], strtotime($data[7])), $str['until']) . ')';
+					else $metadata['filename'] .= ' (' . human_filesize($metadata['filesize']) . ', ' . str_replace('%d', date($str['dateformat'], strtotime($data[7])), $str['until']) . ')';
 					echo '				<a href="' . $str['link'] . $download_url . '" class="list-group-item" hreflang="' . $_SESSION['lang'] . '">
 					<h4 class="list-group-item-heading">' . htmlspecialchars($metadata['filename']) . '</h4>
 					<p class="list-group-item-text">' . $str['link'] . $download_url . '</p>

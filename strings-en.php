@@ -1,5 +1,6 @@
 <?php
 $str['servicename'] = 'YSUS';
+$str['dateformat'] = 'm/d/Y';
 $str['title'] = sprintf('%s :: The Fully-Encrypted File Sharing Service',$str['servicename']);
 $str['newfile'] = 'New file';
 $str['password'] = 'Password for downloading';
@@ -39,6 +40,7 @@ $str['showfilename'] = 'Show filename on download page.';
 $str['enablelist'] = 'List file on <a href="list">file list</a>';
 $str['expires-desc'] = sprintf('Expired file will be automatically deleted completely from the database.<br />No matter how much time is left before the file expires, files not downloaded for over %d days will be deleted.',$expire_day);
 $str['expires'] = 'Expiration date';
+$str['until'] = 'Expires at %d';
 $str['hiddenfilename'] = 'Filename is encrypted.';
 $str['download'] = 'Download';
 $str['err_wrongpw'] = 'Password does not match.';
