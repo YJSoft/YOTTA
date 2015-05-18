@@ -56,4 +56,4 @@ $str['delete'] = 'Delete this file';
 $str['enterpw_delete'] = 'Enter the password for deletion';
 $str['deleted'] = 'File is successfully deleted.';
 $str['controlctocopy']='PressControl+C to copy.';
-$str['footer_string']='the fully-encrypted file sharing service. All rights to uploaded files are reserved to uploaders.<br /><a href="#" data-toggle="tooltip" data-placement="top" title="Jiyong Youn(GSHS 31st, Planning/Development) Kenny Park(GSHS 31st, Planning/Taking care of documents(?))">Created by...</a> | <a href="/licenses.txt">Open source licenses</a> | <a href="/licenses.txt">https://github.com/YJSoft/YOTTA/</a>';
+$str['footer_string']='the fully-encrypted file sharing service. All rights to uploaded files are reserved to uploaders.<br /><a href="#" data-toggle="tooltip" data-placement="top" title="Jiyong Youn(GSHS 31st, Planning/Development) Kenny Park(GSHS 31st, Planning/Taking care of documents(?))">Created by...</a> | <a href="/licenses.txt">Open source licenses</a> | <a href="/licenses.txt">https://github.com/YJSoft/YSUS/</a>';

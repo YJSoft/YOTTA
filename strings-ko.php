@@ -54,4 +54,4 @@ $str['delete'] = '파일 삭제';
 $str['enterpw_delete'] = '파일 삭제용 비밀번호를 입력하세요.';
 $str['deleted']='파일이 삭제되었습니다.';
 $str['controlctocopy']='Control+C를 눌러 복사하세요.';
-$str['footer_string']='완전히 암호화된 파일 공유 서비스. 업로드된 파일에 대한 모든 권리는 업로드한 사용자에게 있습니다.<br /><a href="#" data-toggle="tooltip" data-placement="top" title="윤지용(GSHS 31st, 기획/개발) 박현민(GSHS 31st, 기획/서류처리(?))">만든 사람</a> | <a href="/licenses.txt">오픈소스 라이센스 정보</a> | <a href="https://github.com/YJSoft/YOTTA/">Github</a>';
+$str['footer_string']='완전히 암호화된 파일 공유 서비스. 업로드된 파일에 대한 모든 권리는 업로드한 사용자에게 있습니다.<br /><a href="#" data-toggle="tooltip" data-placement="top" title="윤지용(GSHS 31st, 기획/개발) 박현민(GSHS 31st, 기획/서류처리(?))">만든 사람</a> | <a href="/licenses.txt">오픈소스 라이센스 정보</a> | <a href="https://github.com/YJSoft/YSUS/">Github</a>';
